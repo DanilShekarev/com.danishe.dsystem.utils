@@ -1,0 +1,14 @@
+{
+  "name": "com.danishe.dsystem.utils",
+  "version": "1.0.0",
+  "displayName": "DSystemUtils",
+  "author": {
+    "name": "Danila Schekarev",
+    "url": "https://github.com/DanilShekarev"
+  },
+  "dependencies": {
+    "com.danishe.dsystem": "",
+    "com.unity.textmeshpro": "",
+    "com.unity.visualscripting": ""
+  }
+}
