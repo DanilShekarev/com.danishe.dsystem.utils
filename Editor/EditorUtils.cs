@@ -101,7 +101,7 @@ namespace DSystemUtils.Editor
             }
             if (type == typeof(float))
             {
-                float.TryParse(serializedData, out var value);
+                float.TryParse(serializedData, NumberStyles.Any, CultureInfo.InvariantCulture, out var value);
                 var ret = new FloatField()
                 {
                     value = value,
