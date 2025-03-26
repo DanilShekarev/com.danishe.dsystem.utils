@@ -331,14 +331,18 @@ namespace DSystemUtils.Dynamic.Editor
                 
                 var propContent = DrawProperty(valuesParams.GetArrayElementAtIndex(i),
                     serializedObjectsParams.GetArrayElementAtIndex(i), parameter);
-                propContent.style.flexGrow = 10;
-                propContent.visible = field.index == 0;
                 
                 field.RegisterValueChangedCallback(GetChangeEvent(memberProp, thisUseProp, propContent));
 
                 row.Add(label);
                 row.Add(field);
-                row.Add(propContent);
+                
+                if (propContent != null)
+                {
+                    propContent.style.flexGrow = 10;
+                    propContent.visible = field.index == 0;   
+                    row.Add(propContent);
+                }
 
                 _content.Add(row);
             }
@@ -381,12 +385,14 @@ namespace DSystemUtils.Dynamic.Editor
                     methodNameProp.stringValue = string.Empty;
                     parametersNamesProp.arraySize = 0;
                     thisUseProp.boolValue = newMember.This;
-                    inputField.visible = !newMember.This;
+                    if (inputField != null)
+                        inputField.visible = !newMember.This;
                 } else
                 {
                     typeNameProp.stringValue = newMember.Method.DeclaringType.AssemblyQualifiedName;
                     methodNameProp.stringValue = newMember.Method.Name;
-                    inputField.visible = false;
+                    if (inputField != null)
+                        inputField.visible = false;
                     
                     var parameters = newMember.Method.GetParameters();
                     parametersNamesProp.arraySize = parameters.Length;
