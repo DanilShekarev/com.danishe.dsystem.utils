@@ -128,7 +128,14 @@ namespace DSystemUtils.Dynamic.Editor
         {
             if (methodInfo.Method == null)
                 return "None";
-            return $"{methodInfo.Method.Name}{GetParamsNames(GetMethodParametersType(methodInfo.Method))}";
+            return $"{GetMethodName(methodInfo.Method)}{GetParamsNames(GetMethodParametersType(methodInfo.Method))}";
+        }
+
+        private string GetMethodName(MethodInfo method)
+        {
+            if (method.IsSpecialName)
+                return method.Name.Replace("get_", "").Replace("set_", "");
+            return method.Name;
         }
         
         private string FormatSelectedValueCallback(PopupPair methodInfo)
@@ -136,8 +143,8 @@ namespace DSystemUtils.Dynamic.Editor
             if (methodInfo.Method == null)
                 return "None";
             if (methodInfo.Index == 0)
-                return $"{methodInfo.Target}/{methodInfo.Method.Name}{GetParamsNames(GetMethodParametersType(methodInfo.Method))}";
-            return $"{methodInfo.Target} ({methodInfo.Index})/{methodInfo.Method.Name}{GetParamsNames(GetMethodParametersType(methodInfo.Method))}";
+                return $"{methodInfo.Target}/{GetMethodName(methodInfo.Method)}{GetParamsNames(GetMethodParametersType(methodInfo.Method))}";
+            return $"{methodInfo.Target} ({methodInfo.Index})/{GetMethodName(methodInfo.Method)}{GetParamsNames(GetMethodParametersType(methodInfo.Method))}";
         }
         
         private void OnChangeTargetMethod(ChangeEvent<PopupPair> evt)
@@ -412,7 +419,7 @@ namespace DSystemUtils.Dynamic.Editor
                 return "None";
             if (arg.This)
                 return "This";
-            return arg.Method.Name;
+            return GetMethodName(arg.Method);
         }
 
         private IEnumerable<CustomSelectMember> GetMethods(Type type, Type needType)
