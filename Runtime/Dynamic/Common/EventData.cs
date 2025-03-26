@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using Unity.VisualScripting;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -7,85 +6,62 @@ using Object = UnityEngine.Object;
 namespace DSystemUtils.Dynamic
 {
     [Serializable]
-    public struct EventData
+    public struct EventData<T>
     {
         public Object target;
-        public string methodName;
-        public string[] methodsParamsTypes;
-        public string[] propertyNames;
+        public SerializableMember targetMember;
+        public bool[] useThis;
+        public SerializableMember[] dataMembers;
         public string[] serializedValues;
         public Object[] serializedObjects;
         
-        private MethodInfo _method;
-        private ParameterInfo[] _parameters;
+        private Type[] _parameters;
 
-        public void Invoke(object val)
+        private object _invokeObject;
+
+        public void Invoke(T val)
         {
             var type = val.GetType();
             var targetType = target.GetType();
-            if (_method == null)
-            {
-                if (GetParameters(out var parametersTypes))
-                    _method = targetType.GetMethod(GetMethodName(), parametersTypes);
-                else
-                    _method = targetType.GetMethod(GetMethodName());
-            }
             
-            if (_method == null)
+            if (!targetMember.Exist)
             {
-                Debug.LogError($"{targetType.Name} not have method {methodName}!");
+                Debug.LogError($"{targetType.Name} not have {targetMember.MemberName}!");
                 return;
             }
-            _parameters ??= _method.GetParameters();
+
+            _invokeObject = targetMember.DeclarationType == target.GetType() ? target : null;
+            
+            _parameters ??= targetMember.GetParameters();
             object[] parameters = new object[_parameters.Length];
             for (int i = 0; i < parameters.Length; i++)
             {
-                if (propertyNames.Length > i)
+                if (dataMembers.Length > i)
                 {
-                    string propertyName = propertyNames[i];
-                    if (string.IsNullOrEmpty(propertyName) || propertyName == "None")
-                        parameters[i] = GetValue(i, _parameters[i].ParameterType);
-                    else if (propertyName == "this")
+                    var member = dataMembers[i];
+                    if (useThis[i])
                         parameters[i] = val;
+                    else if (member is not { Exist: true })
+                    {
+                        if (i == 0 && _parameters[i] == target.GetType())
+                            parameters[i] = target;
+                        else
+                            parameters[i] = GetValue(i, _parameters[i]);   
+                    }
                     else
                     {
-                        var propertyInfo = type.GetProperty(propertyName);
-                        if (propertyInfo == null)
-                            Debug.LogError($"{type.Name} not have property {propertyName}!");
+                        if (member.Exist)
+                            parameters[i] = member.InvokeGet(val);
                         else
-                            parameters[i] = propertyInfo.GetValue(val);
+                            Debug.LogError($"{type.Name} not have {member.MemberName}!");
                     }
                 }
                 else
                 {
-                    parameters[i] = GetValue(i, _parameters[i].ParameterType);
+                    parameters[i] = GetValue(i, _parameters[i]);
                 }
             }
-            _method?.Invoke(target, parameters);
-        }
-
-        private string GetMethodName()
-        {
-            var ret = methodName.Substring(0, methodName.IndexOf('(')-1);
-            return ret;
-        }
-
-        private bool GetParameters(out Type[] parametersTypes)
-        {
-            if (methodsParamsTypes == null || methodsParamsTypes.Length == 0)
-            {
-                parametersTypes = null;
-                return false;
-            }
-            
-            Type[] types = new Type[methodsParamsTypes.Length];
-            for (int i = 0; i < types.Length; i++)
-            {
-                types[i] = Type.GetType(methodsParamsTypes[i]);
-            }
-            
-            parametersTypes = types;
-            return true;
+            targetMember.Invoke(_invokeObject, parameters);
         }
 
         public object GetValue(int i, Type type)

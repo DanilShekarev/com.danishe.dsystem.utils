@@ -2,7 +2,9 @@
 using System.Globalization;
 using System.Reflection;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
 namespace DSystemUtils.Editor
@@ -67,6 +69,119 @@ namespace DSystemUtils.Editor
             }
 
             return false;
+        }
+        
+        public static VisualElement DrawSerializedProp(Type type, string serializedData, Object objRef, 
+            Action<string> serDataChanged, Action<Object> objectChanged)
+        {
+            if (type == typeof(string))
+            {
+                var ret = new TextField()
+                {
+                    value = serializedData,
+                };
+                ret.RegisterValueChangedCallback(evt =>
+                {
+                    serDataChanged?.Invoke(evt.newValue);
+                });
+                return ret;
+            }
+            if (type == typeof(int))
+            {
+                int.TryParse(serializedData, out var value);
+                var ret = new IntegerField()
+                {
+                    value = value,
+                };
+                ret.RegisterValueChangedCallback(evt =>
+                {
+                    serDataChanged?.Invoke(evt.newValue.ToString(CultureInfo.InvariantCulture));
+                });
+                return ret;
+            }
+            if (type == typeof(float))
+            {
+                float.TryParse(serializedData, out var value);
+                var ret = new FloatField()
+                {
+                    value = value,
+                };
+                ret.RegisterValueChangedCallback(evt =>
+                {
+                    serDataChanged?.Invoke(evt.newValue.ToString(CultureInfo.InvariantCulture));
+                });
+                return ret;
+            }
+            if (type == typeof(bool))
+            {
+                bool.TryParse(serializedData, out var value);
+                var ret = new Toggle()
+                {
+                    value = value,
+                };
+                ret.RegisterValueChangedCallback(evt =>
+                {
+                    serDataChanged?.Invoke(evt.newValue.ToString(CultureInfo.InvariantCulture));
+                });
+                return ret;
+            }
+            if (type == typeof(LayerMask))
+            {
+                int.TryParse(serializedData, out var value);
+                var ret = new LayerMaskField()
+                {
+                    value = value,
+                };
+                ret.RegisterValueChangedCallback(evt =>
+                {
+                    serDataChanged?.Invoke(evt.newValue.ToString(CultureInfo.InvariantCulture));
+                });
+                return ret;
+            }
+            if (typeof(Object).IsAssignableFrom(type))
+            {
+                var ret = new ObjectField()
+                {
+                    value = objRef,
+                    objectType = type,
+                    allowSceneObjects = true,
+                };
+                ret.RegisterValueChangedCallback(evt =>
+                {
+                    objectChanged?.Invoke(evt.newValue);
+                });
+                return ret;
+            }
+            if (type.IsEnum)
+            {
+                Enum.TryParse(type, serializedData, out var enumValue);
+
+                var ret = new EnumField()
+                {
+                    value = (Enum)enumValue,
+                };
+                ret.RegisterValueChangedCallback(evt =>
+                {
+                    serDataChanged?.Invoke(evt.newValue.ToString());
+                });
+                // if (type.GetCustomAttribute<FlagsAttribute>() != null)
+                // {
+                //     int.TryParse(serializedData, out int mask);
+                //     mask = EditorGUI.MaskField(rect, mask, names);
+                //     serializedData = mask.ToString();
+                // }
+                // else
+                // {
+                //     var index = Array.IndexOf(names, serializedData);
+                //     if (index == -1)
+                //         index = 0;
+                //     index = EditorGUI.Popup(rect, index, names);
+                //     serializedData = names[index];
+                // }
+                return ret;
+            }
+
+            return null;
         }
         
         private const BindingFlags AllBindingFlags = (BindingFlags)(-1);

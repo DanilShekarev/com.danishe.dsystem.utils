@@ -6,7 +6,7 @@ namespace DSystemUtils.Dynamic
     [Serializable]
     public class DEvent<T>
     {
-        [SerializeField] private EventData[] events;
+        [SerializeField] private EventData<T>[] events;
 
         public void Invoke(T value)
         {
