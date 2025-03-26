@@ -143,8 +143,8 @@ namespace DSystemUtils.Dynamic.Editor
             if (methodInfo.Method == null)
                 return "None";
             if (methodInfo.Index == 0)
-                return $"{methodInfo.Target}/{GetMethodName(methodInfo.Method)}{GetParamsNames(GetMethodParametersType(methodInfo.Method))}";
-            return $"{methodInfo.Target} ({methodInfo.Index})/{GetMethodName(methodInfo.Method)}{GetParamsNames(GetMethodParametersType(methodInfo.Method))}";
+                return $"{methodInfo.Target.GetType().Name}/{GetMethodName(methodInfo.Method)}{GetParamsNames(GetMethodParametersType(methodInfo.Method))}";
+            return $"{methodInfo.Target.GetType().Name} ({methodInfo.Index})/{GetMethodName(methodInfo.Method)}{GetParamsNames(GetMethodParametersType(methodInfo.Method))}";
         }
         
         private void OnChangeTargetMethod(ChangeEvent<PopupPair> evt)
@@ -230,6 +230,7 @@ namespace DSystemUtils.Dynamic.Editor
 
             if (obj != null)
             {
+                methodList.AddRange(GetMethods(obj, 0));
                 var components = obj.GetComponents<Component>();
                 Dictionary<Type, int> indexPairs = new ();
                 foreach (var component in components)
