@@ -45,6 +45,9 @@ namespace DSystemUtils.Text
 
         public virtual void UpdateText(string text)
         {
+            if (_tmpText == null)
+                _tmpText = GetComponent<TMP_Text>();
+                
             _tmpText.text = text;
         }
     }

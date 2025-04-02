@@ -1,5 +1,11 @@
 ﻿# Changelog
 
+## [1.1.1] - 2025-04-02
+
+### Fixed
+- **Text Formater**:
+  - UpdateText(string text) fix get component.
+
 ## [1.1.0] - 2025-03-26
 
 ### Added
