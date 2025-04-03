@@ -5,6 +5,7 @@
 ### Fixed
 - **DEvent**:
   - Cant select member with assignable return type.
+  - Mismatches between the target and field classes resulted in an Exception.
 
 ## [1.1.1] - 2025-04-02
 

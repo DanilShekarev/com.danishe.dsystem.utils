@@ -30,7 +30,7 @@ namespace DSystemUtils.Dynamic
                 return;
             }
 
-            _invokeObject = targetMember.DeclarationType == target.GetType() ? target : null;
+            _invokeObject = targetMember.DeclarationType.IsAssignableFrom(target.GetType()) ? target : null;
             
             _parameters ??= targetMember.GetParameters();
             object[] parameters = new object[_parameters.Length];
