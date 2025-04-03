@@ -434,9 +434,9 @@ namespace DSystemUtils.Dynamic.Editor
             }
             foreach (var method in props)
             {
-                if (method.ReturnType != needType)
-                    continue;
                 if (_excludedClasses.Contains(method.DeclaringType))
+                    continue;
+                if (!needType.IsAssignableFrom(method.ReturnType))
                     continue;
                 var prams = method.GetParameters();
                 var extensionMethod = prams.Length == 1 && prams[0].ParameterType == type;

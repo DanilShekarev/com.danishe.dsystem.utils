@@ -1,5 +1,11 @@
 ﻿# Changelog
 
+## [1.1.2] - 2025-04-03
+
+### Fixed
+- **DEvent**:
+  - Cant select member with assignable return type.
+
 ## [1.1.1] - 2025-04-02
 
 ### Fixed
