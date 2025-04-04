@@ -1,6 +1,7 @@
 ﻿using System;
 using DSystemUtils.Dynamic;
 using DSystemUtils.Srialization;
+using DSystemUtils.Utils;
 using UnityEngine;
 
 namespace DSystemUtils.DataStorage
@@ -28,7 +29,6 @@ namespace DSystemUtils.DataStorage
         private void OnDataChanged(DynamicArguments args = null)
         {
             Save(args);
-            ValueChanged?.Invoke(args);
         }
 
         private void Save(DynamicArguments args = null)
@@ -45,14 +45,18 @@ namespace DSystemUtils.DataStorage
 
         private void ParseData(string data)
         {
-            if (string.IsNullOrEmpty(data)) return;
+            if (string.IsNullOrEmpty(data))
+                return;
             SetValue(_serializer.Deserialize(data));
         }
 
         public void SetValue(T value, DynamicArguments args = null)
         {
+            OldValue<T> oldValue = new OldValue<T>(Value);
+            args ??= new DynamicArguments();
+            args.AddArgument(oldValue);
+            
             Value = value;
-            ValueChanged?.Invoke(args);
             Save(args);
         }
 

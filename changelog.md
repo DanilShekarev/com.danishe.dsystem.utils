@@ -1,5 +1,15 @@
 ﻿# Changelog
 
+## [1.1.3] - 2025-04-04
+
+### Added
+- **Storage**:
+  - ValueChanged event optional OldValue in Dynamic Arguments.
+
+### Fixed
+- **Storage**:
+  - Multiple ValueChanged event invoke.
+
 ## [1.1.2] - 2025-04-03
 
 ### Fixed
