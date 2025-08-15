@@ -5,10 +5,5 @@
   "author": {
     "name": "Danila Schekarev",
     "url": "https://github.com/DanilShekarev"
-  },
-  "dependencies": {
-    "com.danishe.dsystem": "",
-    "com.unity.textmeshpro": "",
-    "com.unity.visualscripting": ""
   }
 }
