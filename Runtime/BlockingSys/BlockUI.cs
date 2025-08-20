@@ -46,6 +46,27 @@ namespace DSystemUtils.BlockingSys
             _blockingSystem.RemoveAcceptedObject(GetTr(tr));
         }
         
+        
+        public void AddBlock()
+        {
+            _blockingSystem.AddBlockingObject(GetTr(NewTarget));
+        }
+
+        public void RemoveBlock()
+        {
+            _blockingSystem.RemoveBlockingObject(GetTr(NewTarget));
+        }
+
+        public void AddAccept()
+        {
+            _blockingSystem.AddAcceptedObject(GetTr(NewTarget));
+        }
+
+        public void RemoveAccept()
+        {
+            _blockingSystem.RemoveAcceptedObject(GetTr(NewTarget));
+        }
+        
         public void SelectChild(int index)
         {
             NewTarget = NewTarget.GetChild(index);
@@ -53,8 +74,6 @@ namespace DSystemUtils.BlockingSys
 
         private Transform GetTr(Transform tr)
         {
-            if (tr == null)
-                NewTarget.GetChild(index);
             if (index == -1)
                 return tr;
             if (tr.childCount <= index)
