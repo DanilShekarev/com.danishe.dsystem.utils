@@ -78,7 +78,7 @@ namespace DSystemUtils.BlockingSys
                 return tr;
             if (tr.childCount <= index)
                 return null;
-            return tr;
+            return tr.GetChild(index);
         }
     }
 }
