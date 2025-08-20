@@ -6,8 +6,25 @@ namespace DSystemUtils.BlockingSys
     public class BlockUI : DBehaviour, IBlockingInterfaceListener
     {
         [SerializeField] private int index = -1;
+        [SerializeField] private Transform target;
         
         [Inject] private BlockingSystem _blockingSystem;
+        
+        private Transform NewTarget
+        {
+            get
+            {
+                if (_newTempTarget == null)
+                    return target.transform;
+                
+                return _newTempTarget;
+            }
+            set
+            {
+                _newTempTarget = value;
+            }
+        }
+        private Transform _newTempTarget;
 
         public void AddBlock(Transform tr)
         {
@@ -28,14 +45,21 @@ namespace DSystemUtils.BlockingSys
         {
             _blockingSystem.RemoveAcceptedObject(GetTr(tr));
         }
+        
+        public void SelectChild(int index)
+        {
+            NewTarget = NewTarget.GetChild(index);
+        }
 
         private Transform GetTr(Transform tr)
         {
+            if (tr == null)
+                NewTarget.GetChild(index);
             if (index == -1)
                 return tr;
             if (tr.childCount <= index)
                 return null;
-            return tr.GetChild(index);
+            return tr;
         }
     }
 }

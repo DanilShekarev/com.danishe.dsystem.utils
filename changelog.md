@@ -1,5 +1,13 @@
 ﻿# Changelog
 
+## [1.1.4] - 2025-08-28
+
+### Fixed
+- **DEvent**:
+  - Fixed static extension methods
+- **BlockUI**
+  - Add child propagation
+
 ## [1.1.3] - 2025-04-04
 
 ### Added

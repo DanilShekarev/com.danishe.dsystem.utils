@@ -306,6 +306,12 @@ namespace DSystemUtils.Dynamic.Editor
             }
             
             bool isExtensionMethod = method.IsDefined(typeof(ExtensionAttribute), true);
+
+            if (isExtensionMethod)
+            {
+                var memberProp = dataMembersProp.GetArrayElementAtIndex(0);
+                GetChangeEvent(memberProp, null, null).Invoke(new ChangeEvent<CustomSelectMember>());
+            }
             
             for (var i = isExtensionMethod ? 1 : 0; i < parameters.Length; i++)
             {
@@ -392,7 +398,8 @@ namespace DSystemUtils.Dynamic.Editor
                     typeNameProp.stringValue = string.Empty;
                     methodNameProp.stringValue = string.Empty;
                     parametersNamesProp.arraySize = 0;
-                    thisUseProp.boolValue = newMember.This;
+                    if (thisUseProp != null)
+                        thisUseProp.boolValue = newMember.This;
                     if (inputField != null)
                         inputField.visible = !newMember.This;
                 } else
