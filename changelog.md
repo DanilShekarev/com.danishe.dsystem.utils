@@ -1,5 +1,13 @@
 ﻿# Changelog
 
+## [1.1.5] - 2025-11-21
+
+### Added
+- **BlockUI**:
+  - Added InputBehaviourState.
+  - Added InputBehaviourChanger.
+  - Added IBlockingSystemChecker.
+
 ## [1.1.4] - 2025-08-28
 
 ### Fixed
