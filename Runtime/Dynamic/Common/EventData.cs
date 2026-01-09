@@ -71,7 +71,7 @@ namespace DSystemUtils.Dynamic
             {
                 return serializedObjects[i];
             }
-            if (type.IsSubclassOf(typeof(Color)))
+            if (type == typeof(Color))
             {
                 return ParseColor(serializedValues[i]);
             }
