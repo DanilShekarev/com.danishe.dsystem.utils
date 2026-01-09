@@ -1,5 +1,11 @@
 ﻿# Changelog
 
+## [1.1.6] - 2026-01-09
+
+### Added
+- **DEvent**:
+  - Support Color serialization
+
 ## [1.1.5] - 2025-11-21
 
 ### Added

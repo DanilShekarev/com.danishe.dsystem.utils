@@ -457,7 +457,7 @@ namespace DSystemUtils.Dynamic.Editor
             ParameterInfo parameterInfo)
         {
             var type = parameterInfo.ParameterType; 
-            if (!type.IsSerializable && !typeof(Object).IsAssignableFrom(type))
+            if (!type.IsSerializable && !typeof(Object).IsAssignableFrom(type) && !typeof(Color).IsAssignableFrom(type))
                 return null;
 
             string data = valueProp.stringValue;
