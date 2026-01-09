@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Reflection;
+using DSystemUtils.Dynamic;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -154,7 +155,7 @@ namespace DSystemUtils.Editor
             }
             if (typeof(Color).IsAssignableFrom(type))
             {
-                var color = ParseColor(serializedData);
+                var color = EventData<bool>.ParseColor(serializedData);
                 var ret = new ColorField()
                 {
                     value = color
@@ -195,23 +196,6 @@ namespace DSystemUtils.Editor
             }
 
             return null;
-        }
-        
-        public static Color ParseColor(string s)
-        {
-            if (string.IsNullOrEmpty(s))
-                return Color.white;
-
-            s = s.Replace("RGB", "");
-            s = s.Replace("A", "");
-            s = s.Replace("(", "");
-            s = s.Replace(")", "");
-            var parts = s.Split(',');
-            float r = float.Parse(parts[0], CultureInfo.InvariantCulture);
-            float g = float.Parse(parts[1], CultureInfo.InvariantCulture);
-            float b = float.Parse(parts[2], CultureInfo.InvariantCulture);
-            float a = parts.Length > 3 ? float.Parse(parts[3], CultureInfo.InvariantCulture) : 1f;
-            return new Color(r, g, b, a);
         }
         
         private const BindingFlags AllBindingFlags = (BindingFlags)(-1);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Unity.VisualScripting;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -70,6 +71,10 @@ namespace DSystemUtils.Dynamic
             {
                 return serializedObjects[i];
             }
+            if (type.IsSubclassOf(typeof(Color)))
+            {
+                return ParseColor(serializedValues[i]);
+            }
             if (type == typeof(int))
             {
                 int.TryParse(serializedValues[i], out var ret);
@@ -102,6 +107,23 @@ namespace DSystemUtils.Dynamic
                 return serializedValues[i];
             }
             return default;
+        }
+        
+        public static Color ParseColor(string s)
+        {
+            if (string.IsNullOrEmpty(s))
+                return Color.white;
+
+            s = s.Replace("RGB", "");
+            s = s.Replace("A", "");
+            s = s.Replace("(", "");
+            s = s.Replace(")", "");
+            var parts = s.Split(',');
+            float r = float.Parse(parts[0], CultureInfo.InvariantCulture);
+            float g = float.Parse(parts[1], CultureInfo.InvariantCulture);
+            float b = float.Parse(parts[2], CultureInfo.InvariantCulture);
+            float a = parts.Length > 3 ? float.Parse(parts[3], CultureInfo.InvariantCulture) : 1f;
+            return new Color(r, g, b, a);
         }
     }
 }
